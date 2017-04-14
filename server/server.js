@@ -32,12 +32,10 @@ io.on("connection", (socket) => {
         
     })
 
-    // console.log(`${socket.id} connected to the game`);
-
     socket.emit("chooseTeam", teams, (team) => {
         console.log(`player choose to be: ${team}`);
-        let removalIndex = teams.removalIndexOf(team);
-        teams.splice(index, 1);
+        let removalIndex = teams.indexOf(team);
+        teams.splice(removalIndex, 1);
         console.log(teams);
     });
 

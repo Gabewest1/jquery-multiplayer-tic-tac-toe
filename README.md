@@ -1,2 +1,1 @@
-Multiplayer tic-tac-toe using node and react Edit
-Add topics
+Multiplayer tic-tac-toe using node and jquery
