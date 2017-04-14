@@ -1,0 +1,42 @@
+<style>
+    .loading {
+        color: white;
+        font-size: 48px;
+    }
+    .loading span {
+        animation-name: loading;
+        animation-iteration-count: infinite;
+        animation-fill-mode: both;
+    }
+    @keyframes loading {
+        0%{ opacity: 0 }
+        60% { opacity: 1 }
+        100% { opacity: 0 }
+    }
+</style>
+
+<div>
+    <h1 class="loading">
+        Looking for opponent....
+    </h1>
+</div>
+
+<script>
+    let loadingText = $(".loading").text().trim().split("");
+    let animationDuration = 700;
+    let animationDelay = animationDuration/loadingText.length;
+    let delayCounter = 0;
+
+    loadingText = loadingText.map(letter => { 
+        if(letter !== ".") 
+            return letter
+
+        let $animatedSpan = $("<span>")
+        $animatedSpan.text(letter)
+        $animatedSpan.css("animation-duration", `${animationDuration}ms`)
+        $animatedSpan.css("animation-delay", `${animationDelay*delayCounter++}ms`)
+        return $animatedSpan
+    });
+
+    $(".loading").html(loadingText);
+</script>

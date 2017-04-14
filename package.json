@@ -4,14 +4,17 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "mocha ./tests --timeout 15000",
+    "start": "nodemon server/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^3.5.0",
+    "colors": "^1.1.2",
     "express": "^4.15.2",
+    "mocha": "^3.2.0",
     "socket.io": "^1.7.3"
   }
 }

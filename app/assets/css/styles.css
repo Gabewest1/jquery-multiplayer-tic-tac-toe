@@ -1,0 +1,35 @@
+body {
+    background: url("/assets/images/chalkboard--large.jpg") center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+.tile {
+    border: solid black thin;
+    background-color: blueviolet;
+    width: 200px;
+    height: 200px;
+}
+.red {
+    background-color: red;
+}
+.blue {
+    background-color: blue;
+}
+
+@media (max-width: 480px) {
+    body {
+        /*background: url("/assets/images/chalkboard--small.jpg");*/
+    }
+    .tile {
+        width: 75px;
+        height: 75px;
+    }
+}
