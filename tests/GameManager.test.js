@@ -17,11 +17,6 @@ describe("GameManager", () => {
         client = io("http://localhost:8000")
         done()
     })
-    // it("should message all players in a game room of an event", (done) => {
-    //     client.on("connect", () => {
-    //         client.on("")
-    //     })
-    // })
     it("should add a player to a game room", (done) => {
         let playerWasAdded = false;
 
