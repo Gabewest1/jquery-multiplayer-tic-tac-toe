@@ -44,7 +44,7 @@ $(document).ready(() => {
             }
             let tile = e.target;
             let data = {tileIndex: $(tile).data("index")};
-            let isTileSet = tile.classList.contains("blue") || tile.classList.contains("red");
+            let isTileSet = tile.classList.contains("x") || tile.classList.contains("o");
 
             if(isTileSet) {
                 alert("That tile has already been chosen! Go again...");
@@ -58,10 +58,10 @@ $(document).ready(() => {
             let tile = $(".tile").filter(index => index === tileIndex)[0];
             
             if(isPlayer1Turn) {
-                tile.classList.add("red");
+                tile.classList.add("o");
                 isPlayer1Turn = false;
             } else {
-                tile.classList.add("blue");
+                tile.classList.add("x");
                 isPlayer1Turn = true;
             }
             isGameOver();
@@ -71,13 +71,13 @@ $(document).ready(() => {
         socket.emit("reset");
     }
     function resetBoard() {
-        $(".tile").removeClass("red")
-                .removeClass("blue");
+        $(".tile").removeClass("o")
+                .removeClass("x");
     }
     function isGameOver() {
         console.log("isGameOver is running");
-        let player1Tiles = $(".red").map((index, tile) => $(tile).data("index"));
-        let player2Tiles = $(".blue").map((index, tile) => $(tile).data("index"));
+        let player1Tiles = $(".o").map((index, tile) => $(tile).data("index"));
+        let player2Tiles = $(".x").map((index, tile) => $(tile).data("index"));
         player1Tiles = Array.from(player1Tiles);
         player2Tiles = Array.from(player2Tiles);
         
