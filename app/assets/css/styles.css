@@ -7,35 +7,14 @@ body {
     align-items: center;
     text-align: center;
 }
-/*.board {
-    background-image: url("/assets/images/board.jpg");
-}*/
+.board {
+    background-image: url("/assets/images/board.png");
+}
 .row {
     display: flex;
     justify-content: space-between;
 }
-.row div:first-child, .row div:last-child {
-    border-left: none;
-    border-right: none;
-}
-.row:first-child div:first-child, .row:first-child div:last-child {
-    border: none;
-}
-.row:first-child div:nth-child(2), .row:last-child div:nth-child(2) {
-    border-top: none;
-    border-bottom: none;
-} 
-.row:last-child div:nth-child(2) {
-    border-bottom: none;
-}
-.row:last-child div:first-child, .row:last-child div:last-child {
-    border: none;
-}
-
 .tile {
-    filter: blur(6px);
-    border: solid 20px #f4f4f0;
-    border-radius: 20px;
     width: 200px;
     height: 200px;
 }
