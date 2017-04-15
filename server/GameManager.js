@@ -4,11 +4,6 @@ class GameManager {
         this.gameRoomCounter = 0;
         this.socket = serverSocket;
     }
-
-    showGames() {
-        this.gameRooms.forEach(room => console.log(room))
-    }
-
     createGameRoom() {
         let newGameRoom = {
             id: this.gameRoomCounter++,
@@ -18,25 +13,21 @@ class GameManager {
         this.gameRooms.push(newGameRoom);
         return newGameRoom
     }
-
     addPlayer(player) {
         let openGame = this.getOpenGame()
         openGame.players.push(player)
         this.messageGameRoom(openGame.id, "player joined")
     }
-
     addSpectator(spectator) {
         let openGame = this.getOpenGame()
         openGame.spectators.push(spectator)
         this.messageGameRoom(openGame.id, "spectator joined")
     }
-
     messageGameRoom(gameRoomId, eventName, data) {
         let gameRoom = this.gameRooms.filter(room => room.id === gameRoomId)[0]
         gameRoom.players.forEach(player => this.socket.to(player.id).emit(eventName, data))
         gameRoom.spectators.forEach(player => this.socket.to(player.id).emit(eventName, data))
     }
-
     getOpenGame() {
         let firstOpenGame;
         if(this.gameRooms.length === 0) {
@@ -52,16 +43,6 @@ class GameManager {
         }
 
         return this.createGameRoom()
-    }
-
-    findGame() {
-        
-    }
-    findPlayersGame(player) {
-
-    }
-    getPlayers(gameRoom) {
-        return this.gameRooms[gameRoom];
     }
 }
 
