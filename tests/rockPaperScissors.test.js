@@ -35,18 +35,6 @@ describe("echo", () => {
         client = io.connect("http://localhost:8000", options);
         done();
     })
-    it("echos message", function (done) {
-        client.on("connect", function () {
-            client.on("echo", function (message) {
-                message.should.equal("Hello World");
-
-                client.disconnect();
-                done();
-            });
-        
-            client.emit("echo", "Hello World");
-        });
-    });
     it("displays RPC winner", (done) => {
         client.on("connect", () => {
             client.on("RPC winner", (winner) => {

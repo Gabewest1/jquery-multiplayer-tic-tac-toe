@@ -21,12 +21,9 @@ const server= app.listen(8000, () => console.log("running on port 8000"))
 
 let teams = ["X", "O"]
 const io = socket(server)
-io.on("connection", (socket) => {
-    io.emit("reset")
-    
+io.on("connection", (socket) => {    
     socket.on("playOnline", () => {
         GameManager.addPlayer(socket)
-        GameManager.showGames()
     })
     socket.on("foundPlayer", () => {
         
@@ -42,13 +39,6 @@ io.on("connection", (socket) => {
     socket.on("move", (data) => io.emit("move", data))
 
     socket.on("reset", () =>io.emit("reset"))
-
-    socket.on("echo", function (msg, callback) {
-        callback = callback || function () {};
- 
-        socket.emit("echo", msg);
-        callback(null, "Done.");
-    });
 
     socket.on("RPC move", (choice) => {
         let winner = determineWinner(choice[0], choice[1])
