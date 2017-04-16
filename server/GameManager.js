@@ -14,14 +14,20 @@ class GameManager {
         return newGameRoom
     }
     addPlayer(player) {
-        let openGame = this.getOpenGame()
-        openGame.players.push(player)
-        this.messageGameRoom(openGame.id, "player joined")
+        let gameRoom = this.getOpenGame()
+        gameRoom.players.push(player)
+        this.messageGameRoom(gameRoom.id, "player joined")
+        this.isGameRoomReady(gameRoom)
     }
     addSpectator(spectator) {
-        let openGame = this.getOpenGame()
-        openGame.spectators.push(spectator)
-        this.messageGameRoom(openGame.id, "spectator joined")
+        let gameRoom = this.getOpenGame()
+        gameRoom.spectators.push(spectator)
+        this.messageGameRoom(gameRoom.id, "spectator joined")
+    }
+    isGameRoomReady(gameRoom) {
+        if(gameRoom.players.length === 2) {
+            this.messageGameRoom(gameRoom.id, "game ready")
+        }
     }
     messageGameRoom(gameRoomId, eventName, data) {
         let gameRoom = this.gameRooms.filter(room => room.id === gameRoomId)[0]
@@ -37,7 +43,7 @@ class GameManager {
         for(var i=0; i<this.gameRooms.length; i++) {
             let currentGameRoom = this.gameRooms[i]
             if(currentGameRoom.players.length === 1) {
-                firstOpenGame = currentGameRoom;
+                firstOpenGame = currentGameRoom
                 return firstOpenGame
             }
         }
@@ -46,4 +52,4 @@ class GameManager {
     }
 }
 
-module.exports = GameManager;
+module.exports = GameManager

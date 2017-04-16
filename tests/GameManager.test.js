@@ -21,13 +21,14 @@ describe("GameManager", () => {
         let playerWasAdded = false;
 
         client.on("connect", () => {
+            GameManager.addPlayer(client)
+
             client.on("player joined", (data) => {
                 playerWasAdded = true;
 
                 client.disconnect()
             })
 
-            GameManager.addPlayer(client)
             setTimeout(() => {
                 playerWasAdded.should.equal(true)
                 done()
@@ -38,22 +39,38 @@ describe("GameManager", () => {
         let spectatorWasAdded = false;
 
         client.on("connect", () => {
+            GameManager.addSpectator(client)
+
             client.on("spectator joined", (data) => {
                 spectatorWasAdded = true;
 
                 client.disconnect()
             })
 
-            GameManager.addSpectator(client)
             setTimeout(() => {
                 spectatorWasAdded.should.equal(true)
                 done()
             }, 1000)
         })
     })
+    it("should have 1 game room setup after adding 1 players", (done) => {
+        GameManager.addPlayer(client)
+        GameManager.gameRooms.length.should.equal(1)
+
+        client.disconnect()
+        done()
+    })
+    it("should have 1 game room setup after adding 2 players", (done) => {
+        let client2 = io("http://localhost:8000")
+        GameManager.addPlayer(client)
+        GameManager.gameRooms.length.should.equal(1)
+
+        client.disconnect()
+        done()
+    })
     it("should have 2 game rooms setup after adding 3 players", (done) => {
-        let client2 = io("https://localhost:8000")
-        let client3 = io("https://localhost:8000")
+        let client2 = io("http://localhost:8000")
+        let client3 = io("http://localhost:8000")
 
         GameManager.addPlayer(client)
         GameManager.addPlayer(client2)
@@ -67,10 +84,10 @@ describe("GameManager", () => {
         done()
     })
     it("should have 2 game rooms setup after adding 4 players", (done) => {
-        let client2 = io("https://localhost:8000")
-        let client3 = io("https://localhost:8000")
-        let client4 = io("https://localhost:8000")
-
+        let client2 = io("http://localhost:8000")
+        let client3 = io("http://localhost:8000")
+        let client4 = io("http://localhost:8000")
+       
         GameManager.addPlayer(client)
         GameManager.addPlayer(client2)
         GameManager.addPlayer(client3)
@@ -84,4 +101,32 @@ describe("GameManager", () => {
         client4.disconnect()
         done()
     }) 
+    it("should alert everyone in a game room when 2 players are found and ready to start the match", (done) => {
+        let client2 = io("http://localhost:8000")
+        let clientWasAlerted = false
+        let client2WasAlerted = false
+
+        client.on("connect", () => {
+            GameManager.addPlayer(client)
+
+            client.on("game ready", (data) => {
+                clientWasAlerted = true
+                client.disconnect()
+            })
+        })
+        client2.on("connect", () => {
+            GameManager.addPlayer(client2)
+
+            client2.on("game ready", (data) => {
+                client2WasAlerted = true
+                client2.disconnect()                
+            })
+        })
+
+        setTimeout(() => {
+            clientWasAlerted.should.equal(true)
+            client2WasAlerted.should.equal(true)
+            done()
+        }, 3000)
+    })
 })
