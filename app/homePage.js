@@ -24,7 +24,7 @@ $(document).ready(() => {
 
         function showFoundOpponent() {
             console.log("inner function is called")
-            $("body").html(`<h1>Found Opponent!</h1>`)
+            $(".loading").text(`Found Opponent!`)
             setTimeout(() => {
                 window.location.replace("/ticTacToe")
             }, 3000)

@@ -22,10 +22,10 @@
 </div>
 
 <script>
-    let loadingText = $(".loading").text().trim().split("");
-    let animationDuration = 700;
-    let animationDelay = animationDuration/loadingText.length;
-    let delayCounter = 0;
+    let loadingText = $(".loading").text().trim().split("")
+    let animationDuration = 700
+    let animationDelay = animationDuration/loadingText.length
+    let delayCounter = 0
 
     loadingText = loadingText.map(letter => { 
         if(letter !== ".") 
@@ -36,7 +36,7 @@
         $animatedSpan.css("animation-duration", `${animationDuration}ms`)
         $animatedSpan.css("animation-delay", `${animationDelay*delayCounter++}ms`)
         return $animatedSpan
-    });
+    })
 
     $(".loading").html(loadingText)
 </script>
