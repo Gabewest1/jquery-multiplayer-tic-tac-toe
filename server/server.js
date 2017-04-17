@@ -21,15 +21,14 @@ const server= app.listen(8000, () => console.log("running on port 8000"))
 
 let teams = ["X", "O"]
 const io = socket(server)
+let gameManager = new GameManager(io)
+
 io.on("connection", (socket) => {    
-    socket.on("playOnline", () => {
-        GameManager.addPlayer(socket)
-    })
-    socket.on("foundPlayer", () => {
-        
+    socket.on("play online", () => {
+        gameManager.addPlayer(socket)
     })
 
-    socket.emit("chooseTeam", teams, (team) => {
+    socket.on("choose team", (team) => {
         console.log(`player choose to be: ${team}`);
         let removalIndex = teams.indexOf(team);
         teams.splice(removalIndex, 1);
@@ -38,7 +37,7 @@ io.on("connection", (socket) => {
 
     socket.on("move", (data) => io.emit("move", data))
 
-    socket.on("reset", () =>io.emit("reset"))
+    socket.on("reset", () => io.emit("reset"))
 
     socket.on("RPC move", (choice) => {
         let winner = determineWinner(choice[0], choice[1])
