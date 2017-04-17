@@ -9,6 +9,7 @@ body {
 }
 .board {
     background-image: url("/assets/images/board.png");
+    background-size: cover;
 }
 .row {
     display: flex;
@@ -25,10 +26,16 @@ body {
 .x {
     background-color: blue;
 }
-
-@media (max-width: 480px) {
+#reset {
+    margin-top: 30px;
+}
+@media (max-width: 668px) {
+    .board {
+        width: 345px;
+        height: 345px;
+    }
     .tile {
-        width: 75px;
-        height: 75px;
+        width: 115px;
+        height: 115px;
     }
 }

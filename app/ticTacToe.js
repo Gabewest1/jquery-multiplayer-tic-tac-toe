@@ -75,14 +75,11 @@ $(document).ready(() => {
                 .removeClass("x");
     }
     function isGameOver() {
-        console.log("isGameOver is running");
         let player1Tiles = $(".o").map((index, tile) => $(tile).data("index"));
         let player2Tiles = $(".x").map((index, tile) => $(tile).data("index"));
         player1Tiles = Array.from(player1Tiles);
         player2Tiles = Array.from(player2Tiles);
-        
-        console.log(player1Tiles);
-        console.log(player2Tiles);
+
         let winningIndexes = [
             [0,1,2],
             [3,4,5],
@@ -93,22 +90,22 @@ $(document).ready(() => {
             [0,4,8],
             [6,4,2]
         ]
-        let didPlayer1Win = false;
-        let didPlayer2Win = false;
+        let player1Won = false;
+        let player2Won = false;
         winningIndexes.forEach(path => {
             let p1Matches = path.filter(index => player1Tiles.indexOf(index) !== -1);
             let p2Matches = path.filter(index => player2Tiles.indexOf(index) !== -1);
             if(p1Matches.length === 3) {
-                didPlayer1Win = true;
+                player1Won = true;
             } else if(p2Matches.length === 3) {
-                didPlayer2Win = true;
+                player2Won = true;
             }
 
         })
 
-        if(didPlayer1Win) {
+        if(player1Won) {
             gameOver("player1");
-        } else if(didPlayer2Win) {
+        } else if(player2Won) {
             gameOver("player2");
         }
     }
