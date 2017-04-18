@@ -59,9 +59,11 @@ class GameManager {
         for(var i=0; i<this.gameRooms.length; i++) {
             let currentRoom = this.gameRooms[i]
             if(currentRoom.players.indexOf(player) >= 0) {
-                return currentRoom
+                gameRoom = currentRoom
             }
         }
+
+        return gameRoom
     }
 }
 

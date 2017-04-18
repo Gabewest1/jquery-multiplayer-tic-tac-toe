@@ -146,4 +146,13 @@ describe("GameManager", () => {
             done()
         })
     })
+    it("should return undefined when looking for a game room that contains a given player", (done) => {
+        client.on("connect", () => {
+            let gameRoom = gameManager.findPlayersGameRoom(client)
+            expect(gameRoom).equal(undefined)
+            
+            client.disconnect()
+            done()
+        })
+    })
 })
