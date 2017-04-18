@@ -1,0 +1,29 @@
+<style>
+    .rpc {
+        width: 150px;
+        height: 150px;
+    }
+</style>
+
+<div>
+    <div class="rpc rock">Rock</div>
+    <div class="rpc paper">Paper</div>
+    <div class="rpc scissors">Scissors</div>
+</div>
+
+<script>
+    $(".rpc").click((e) => socket.emit("RPC move", getMove(e)))
+
+    function getMove(target) {
+        let move
+        if(target.classList.contains("rock")) {
+            move = "rock"
+        } else if(target.classList.contains("paper")) {
+            move = "paper"
+        } else {
+            move = "scissors"
+        }
+
+        return move
+    }
+</script>

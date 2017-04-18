@@ -23,28 +23,28 @@ describe("winner to rock paper scissors", () => {
     })
 })
 
-describe("echo", () => {
-    let server,
-        client,
-        options = {
-            transports: ["websocket"],
-            "forceNew": true
-        }
-    beforeEach((done) => {
-        server = require("../server/server.js").server;
-        client = io.connect("http://localhost:8000", options);
-        done();
-    })
-    it("displays RPC winner", (done) => {
-        client.on("connect", () => {
-            client.on("RPC winner", (winner) => {
-                winner.should.equal("p1");
+// describe("echo", () => {
+//     let server,
+//         client,
+//         options = {
+//             transports: ["websocket"],
+//             "forceNew": true
+//         }
+//     beforeEach((done) => {
+//         server = require("../server/server.js").server;
+//         client = io.connect("http://localhost:8000", options);
+//         done();
+//     })
+//     it("displays RPC winner", (done) => {
+//         client.on("connect", () => {
+//             client.on("RPC winner", (winner) => {
+//                 winner.should.equal("p1");
                 
-                client.disconnect();
-                done();
-            })
+//                 client.disconnect();
+//                 done();
+//             })
 
-            client.emit("RPC move", ["rock", "scissors"]);
-        })
-    })
-})
+//             client.emit("RPC move", ["rock", "scissors"]);
+//         })
+//     })
+// })

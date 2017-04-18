@@ -40,9 +40,7 @@ io.on("connection", (socket) => {
     socket.on("reset", () => io.emit("reset"))
 
     socket.on("RPC move", (choice) => {
-        let winner = determineWinner(choice[0], choice[1])
-        console.log(winner)
-        io.emit("RPC winner", winner)
+        gameManager.rockPaperScissors(choice, socket.id)
     })
 })
 

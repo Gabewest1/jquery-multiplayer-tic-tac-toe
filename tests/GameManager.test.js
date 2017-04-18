@@ -6,14 +6,14 @@ const colors = require("colors")
 
 
 describe("GameManager", () => {
-    let GameManager
+    let gameManager
     let client
     let server
     let serverSocket
     beforeEach((done) => {
         server = require("../server/server.js").server
         serverSocket = require("../server/server.js").socket
-        GameManager = new (require("../server/GameManager"))(serverSocket)
+        gameManager = new (require("../server/GameManager"))(serverSocket)
         client = io("http://localhost:8000")
         done()
     })
@@ -21,7 +21,7 @@ describe("GameManager", () => {
         let playerWasAdded = false;
 
         client.on("connect", () => {
-            GameManager.addPlayer(client)
+            gameManager.addPlayer(client)
 
             client.on("player joined", (data) => {
                 playerWasAdded = true;
@@ -39,7 +39,7 @@ describe("GameManager", () => {
         let spectatorWasAdded = false;
 
         client.on("connect", () => {
-            GameManager.addSpectator(client)
+            gameManager.addSpectator(client)
 
             client.on("spectator joined", (data) => {
                 spectatorWasAdded = true;
@@ -54,16 +54,16 @@ describe("GameManager", () => {
         })
     })
     it("should have 1 game room setup after adding 1 players", (done) => {
-        GameManager.addPlayer(client)
-        GameManager.gameRooms.length.should.equal(1)
+        gameManager.addPlayer(client)
+        gameManager.gameRooms.length.should.equal(1)
 
         client.disconnect()
         done()
     })
     it("should have 1 game room setup after adding 2 players", (done) => {
         let client2 = io("http://localhost:8000")
-        GameManager.addPlayer(client)
-        GameManager.gameRooms.length.should.equal(1)
+        gameManager.addPlayer(client)
+        gameManager.gameRooms.length.should.equal(1)
 
         client.disconnect()
         done()
@@ -72,11 +72,11 @@ describe("GameManager", () => {
         let client2 = io("http://localhost:8000")
         let client3 = io("http://localhost:8000")
 
-        GameManager.addPlayer(client)
-        GameManager.addPlayer(client2)
-        GameManager.addPlayer(client3)
+        gameManager.addPlayer(client)
+        gameManager.addPlayer(client2)
+        gameManager.addPlayer(client3)
 
-        GameManager.gameRooms.length.should.equal(2)
+        gameManager.gameRooms.length.should.equal(2)
 
         client.disconnect()
         client2.disconnect()
@@ -88,12 +88,12 @@ describe("GameManager", () => {
         let client3 = io("http://localhost:8000")
         let client4 = io("http://localhost:8000")
        
-        GameManager.addPlayer(client)
-        GameManager.addPlayer(client2)
-        GameManager.addPlayer(client3)
-        GameManager.addPlayer(client4)
+        gameManager.addPlayer(client)
+        gameManager.addPlayer(client2)
+        gameManager.addPlayer(client3)
+        gameManager.addPlayer(client4)
 
-        GameManager.gameRooms.length.should.equal(2)
+        gameManager.gameRooms.length.should.equal(2)
 
         client.disconnect()
         client2.disconnect()
@@ -107,7 +107,7 @@ describe("GameManager", () => {
         let client2WasAlerted = false
 
         client.on("connect", () => {
-            GameManager.addPlayer(client)
+            gameManager.addPlayer(client)
 
             client.on("game ready", (data) => {
                 clientWasAlerted = true
@@ -115,7 +115,7 @@ describe("GameManager", () => {
             })
         })
         client2.on("connect", () => {
-            GameManager.addPlayer(client2)
+            gameManager.addPlayer(client2)
 
             client2.on("game ready", (data) => {
                 client2WasAlerted = true
@@ -128,5 +128,22 @@ describe("GameManager", () => {
             client2WasAlerted.should.equal(true)
             done()
         }, 3000)
+    })
+    it("should find the game room containing a give player's socket", (done) => {
+        let foundGameRoom = false
+        client.on("connect", () => {
+            gameManager.addPlayer(client)
+            let gameRoom = gameManager.findPlayersGameRoom(client)
+            
+            if(gameRoom.players.indexOf(client) !== -1) {
+                foundGameRoom = true
+            } else {
+                foundGameRoom = false
+            }
+
+            foundGameRoom.should.equal(true)
+            client.disconnect()
+            done()
+        })
     })
 })

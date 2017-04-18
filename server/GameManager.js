@@ -8,7 +8,8 @@ class GameManager {
         let newGameRoom = {
             id: this.gameRoomCounter++,
             players: [],
-            spectators: []
+            spectators: [],
+            rockPaperScissors: {}
         }
         this.gameRooms.push(newGameRoom);
         return newGameRoom
@@ -49,6 +50,18 @@ class GameManager {
         }
 
         return this.createGameRoom()
+    }
+    rockPaperScissors(choice, playerId) {
+        let playersGameRoom = this.findPlayersGameRoom(playerId)
+    }
+    findPlayersGameRoom(player) {
+        let gameRoom
+        for(var i=0; i<this.gameRooms.length; i++) {
+            let currentRoom = this.gameRooms[i]
+            if(currentRoom.players.indexOf(player) >= 0) {
+                return currentRoom
+            }
+        }
     }
 }
 
