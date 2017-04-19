@@ -14,6 +14,9 @@ $(document).ready(() => {
     }
 
     function handleFoundOpponent() {
+        //The ajax request for loading.html should be retrieved and displayed first,
+        //alerting the player they're searching for a match, before replacing the text
+        //to alert the player a match has been found.
         if(!loadingSceenShown) {
             console.log("loadingSceen didn't show")
             setTimeout(showFoundOpponent, 1000) 
@@ -23,10 +26,9 @@ $(document).ready(() => {
         }
 
         function showFoundOpponent() {
-            console.log("inner function is called")
             $(".loading").text(`Found Opponent!`)
             setTimeout(() => {
-                window.location.replace("/ticTacToe")
+                window.location.replace("/rockPaperScissors.html")
             }, 3000)
         }
     }

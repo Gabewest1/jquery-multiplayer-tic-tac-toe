@@ -51,10 +51,10 @@ class GameManager {
 
         return this.createGameRoom()
     }
-    rockPaperScissors(choice, playerId) {
-        let playersGameRoom = this.findPlayersGameRoom(playerId)
+    rockPaperScissors(choice, player) {
+        let playersGameRoom = this.findPlayersGameRoom(player)
         playersGameRoom.rockPaperScissors[playerId] = choice
-        
+
     }
     findPlayersGameRoom(player) {
         let gameRoom

@@ -10,6 +10,9 @@ app.use(express.static("app"));;
 app.get("/", (req, res) => {
     res.sendFile(path.resolve(__dirname,"..", "app", "home.html"));
 })
+app.get("/rockPaperScissors", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "..", "app", "rockPaperScissors.html"))
+})
 app.get("/ticTacToe", (req, res) => {
     res.sendFile(path.resolve(__dirname, "..", "app", "ticTacToe.html"))
 })
@@ -40,7 +43,7 @@ io.on("connection", (socket) => {
     socket.on("reset", () => io.emit("reset"))
 
     socket.on("RPC move", (choice) => {
-        gameManager.rockPaperScissors(choice, socket.id)
+        gameManager.rockPaperScissors(choice, socket)
     })
 })
 
