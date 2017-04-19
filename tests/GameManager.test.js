@@ -13,7 +13,7 @@ describe("GameManager", () => {
     beforeEach((done) => {
         server = require("../server/server.js").server
         serverSocket = require("../server/server.js").socket
-        gameManager = require("../server/server.js").gameManager
+        gameManager = new (require("../server/GameManager"))(serverSocket)
         client = io("http://localhost:8000")
         done()
     })
@@ -25,12 +25,12 @@ describe("GameManager", () => {
 
             client.on("player joined", (data) => {
                 playerWasAdded = true;
+
+                client.disconnect()
             })
 
             setTimeout(() => {
-                let gameRoom = gameManager.findPlayersGameRoom(client)
                 playerWasAdded.should.equal(true)
-                gameManager.endGame(gameRoom)
                 done()
             }, 1000)
         })
@@ -63,11 +63,9 @@ describe("GameManager", () => {
     it("should have 1 game room setup after adding 2 players", (done) => {
         let client2 = io("http://localhost:8000")
         gameManager.addPlayer(client)
-        gameManager.addPlayer(client2)
         gameManager.gameRooms.length.should.equal(1)
 
         client.disconnect()
-        client2.disconnect()
         done()
     })
     it("should have 2 game rooms setup after adding 3 players", (done) => {
@@ -168,7 +166,7 @@ describe("GameManager", () => {
                 client.disconnect()
             })
 
-            client.emit("RPC move", "rock")
+            gameManager.rockPaperScissors("rock", client)
         })
         client2.on("connect", () => {
             client.on("RPC results", (winner) => {
@@ -177,7 +175,7 @@ describe("GameManager", () => {
                 client2.disconnect()
             })
 
-            client2.emit("RPC move", "scissors")
+            gameManager.rockPaperScissors("rock", client2)
         })
 
         gameManager.addPlayer(client)
@@ -192,8 +190,7 @@ describe("GameManager", () => {
     it("should receive players RPC move", (done) => {
         client.on("connect", () => {
             gameManager.addPlayer(client)
-            console.log(gameManager.gameRooms[0].players[0] === client)
-            client.emit("RPC move", "paper")
+            gameManager.rockPaperScissors("paper", client)
         })
 
         setTimeout(() => {
