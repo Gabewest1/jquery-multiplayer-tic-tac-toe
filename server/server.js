@@ -22,7 +22,6 @@ app.get("/loading", (req, res) => {
 
 const server= app.listen(8000, () => console.log("running on port 8000"))
 
-let teams = ["X", "O"]
 const io = socket(server)
 let gameManager = new GameManager(io)
 
@@ -43,6 +42,7 @@ io.on("connection", (socket) => {
     socket.on("reset", () => io.emit("reset"))
 
     socket.on("RPC move", (choice) => {
+        console.log(`players choice: ${choice}`)
         gameManager.rockPaperScissors(choice, socket)
     })
 })

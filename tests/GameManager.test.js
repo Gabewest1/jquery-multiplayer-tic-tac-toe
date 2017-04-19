@@ -157,27 +157,47 @@ describe("GameManager", () => {
     })
     it("should alert players of the rock-paper-scissors results", (done) => {
         let client2 = io("http://localhost:8000")
+        let clientSawMessage = false
+        let client2SawMessage = false
 
         client.on("connect", () => {
             client.on("RPC results", (winner) => {
-                winner.should.equal(client)
+                clientSawMessage = true
                 client.disconnect()
             })
 
-            gameManager.addPlayer(client)
             client.emit("RPC move", "rock")
         })
         client2.on("connect", () => {
             client.on("RPC results", (winner) => {
                 console.log(`Winner is ${winner}`)
-                winner.should.equal(client)
+                client2SawMessage = true
                 client2.disconnect()
             })
 
-            gameManager.addPlayer(client2)
             client2.emit("RPC move", "scissors")
         })
-        
-        setTimeout(() => done(), 1000)
+
+        gameManager.addPlayer(client)
+        gameManager.addPlayer(client2)
+
+        setTimeout(() => {
+            clientSawMessage.should.equal(true)
+            client2SawMessage.should.equal(true)
+            done()
+        }, 2000)
+    })
+    it("should receive players RPC move", (done) => {
+        client.on("connect", () => {
+            gameManager.addPlayer(client)
+            console.log(gameManager.gameRooms[0].players[0] === client)
+            client.emit("RPC move", "paper")
+        })
+
+        setTimeout(() => {
+            let gameRoom = gameManager.findPlayersGameRoom(client)
+            expect(gameRoom.rockPaperScissors[0].socket).to.equal(client)
+            done()
+        }, 3000)
     })
 })

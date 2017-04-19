@@ -26,4 +26,12 @@
 
         return move
     }
+
+    socket.on("RPC results", (winner) => {
+        if(socket === winner) {
+            $(body).html("You won rock paper scissors!!!")
+        } else {
+            $(body).html("You lost rock paper scissors D:")
+        }
+    })
 </script>

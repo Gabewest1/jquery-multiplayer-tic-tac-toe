@@ -1,3 +1,5 @@
+const determineWinner = require("./rockPaperScissors")
+
 class GameManager {
     constructor(serverSocket) {
         this.gameRooms = [];
@@ -9,7 +11,7 @@ class GameManager {
             id: this.gameRoomCounter++,
             players: [],
             spectators: [],
-            rockPaperScissors: {}
+            rockPaperScissors: []
         }
         this.gameRooms.push(newGameRoom);
         return newGameRoom
@@ -53,7 +55,16 @@ class GameManager {
     }
     rockPaperScissors(choice, player) {
         let playersGameRoom = this.findPlayersGameRoom(player)
-        playersGameRoom.rockPaperScissors[player.id] = choice
+        playersGameRoom.rockPaperScissors.push({socket: player, choice})
+        
+        if(playersGameRoom.rockPaperScissors.length === 2) {
+            this.dispatchRockPaperScissorsWinner(playersGameRoom.rockPaperScissors)
+        }
+    }
+    dispatchRockPaperScissorsWinner(players) {
+        let winner = determineWinner(players[0].choice, players[1].choice)
+        winner = (winner === "p1") ? players[0].socket : players[1].socket
+        players.forEach(player => this.socket.to(player.socket.id).emit("RPC results", winner))
     }
     findPlayersGameRoom(player) {
         let gameRoom
