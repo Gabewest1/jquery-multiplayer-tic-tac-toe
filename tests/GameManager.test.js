@@ -155,4 +155,29 @@ describe("GameManager", () => {
             done()
         })
     })
+    it("should alert players of the rock-paper-scissors results", (done) => {
+        let client2 = io("http://localhost:8000")
+
+        client.on("connect", () => {
+            client.on("RPC results", (winner) => {
+                winner.should.equal(client)
+                client.disconnect()
+            })
+
+            gameManager.addPlayer(client)
+            client.emit("RPC move", "rock")
+        })
+        client2.on("connect", () => {
+            client.on("RPC results", (winner) => {
+                console.log(`Winner is ${winner}`)
+                winner.should.equal(client)
+                client2.disconnect()
+            })
+
+            gameManager.addPlayer(client2)
+            client2.emit("RPC move", "scissors")
+        })
+        
+        setTimeout(() => done(), 1000)
+    })
 })
