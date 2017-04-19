@@ -12,7 +12,7 @@
 </div>
 
 <script>
-    $(".rpc").click((e) => socket.emit("RPC move", getMove(e)))
+    $(".rpc").click((e) => socket.emit("RPC move", getMove(e.target)))
 
     function getMove(target) {
         let move
