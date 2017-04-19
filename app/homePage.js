@@ -28,7 +28,7 @@ $(document).ready(() => {
         function showFoundOpponent() {
             $(".loading").text(`Found Opponent!`)
             setTimeout(() => {
-                window.location.replace("/rockPaperScissors.html")
+                $.ajax("/rockPaperScissors.html").then(response => $("body").html(response))
             }, 3000)
         }
     }

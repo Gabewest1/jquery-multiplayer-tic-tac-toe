@@ -3,7 +3,7 @@ const socket = require("socket.io");
 const path = require("path");
 const GameManager = require("./GameManager");
 const determineWinner = require("./rockPaperScissors");
-
+console.log("THIS SERVER IS BEING INITIATED!!!!")
 const app = express();
 
 app.use(express.static("app"));;
@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
         let removalIndex = teams.indexOf(team);
         teams.splice(removalIndex, 1);
         console.log(teams);
-    });
+    })
 
     socket.on("move", (data) => io.emit("move", data))
 
@@ -47,5 +47,6 @@ io.on("connection", (socket) => {
     })
 })
 
-module.exports.server = server;
-module.exports.socket = io;
+module.exports.server = server
+module.exports.socket = io
+module.exports.gameManager = gameManager

@@ -6,16 +6,6 @@ class GameManager {
         this.gameRoomCounter = 0;
         this.socket = serverSocket;
     }
-    createGameRoom() {
-        let newGameRoom = {
-            id: this.gameRoomCounter++,
-            players: [],
-            spectators: [],
-            rockPaperScissors: []
-        }
-        this.gameRooms.push(newGameRoom);
-        return newGameRoom
-    }
     addPlayer(player) {
         let gameRoom = this.getOpenGame()
         gameRoom.players.push(player)
@@ -26,6 +16,22 @@ class GameManager {
         let gameRoom = this.getOpenGame()
         gameRoom.spectators.push(spectator)
         this.messageGameRoom(gameRoom.id, "spectator joined")
+    }
+    createGameRoom() {
+        let newGameRoom = {
+            id: this.gameRoomCounter++,
+            players: [],
+            spectators: [],
+            rockPaperScissors: []
+        }
+        this.gameRooms.push(newGameRoom);
+        return newGameRoom
+    }
+    endGame(gameRoom) {
+        let playersRoom = this.gameRooms.filter(room => room.id === gameRoom.id)[0]
+        playersRoom.players.forEach(player => player.disconnect())
+        playersRoom.spectators.forEach(spectator => spectator.disconnect())
+        this.gameRooms = this.gameRooms.filter(room => room.id !== playersRoom.id)
     }
     isGameRoomReady(gameRoom) {
         if(gameRoom.players.length === 2) {
@@ -55,16 +61,20 @@ class GameManager {
     }
     rockPaperScissors(choice, player) {
         let playersGameRoom = this.findPlayersGameRoom(player)
+        console.log(`found players game room: ${playersGameRoom}`)
         playersGameRoom.rockPaperScissors.push({socket: player, choice})
         
         if(playersGameRoom.rockPaperScissors.length === 2) {
-            this.dispatchRockPaperScissorsWinner(playersGameRoom.rockPaperScissors)
+            console.log("dispatching a winner")
+            this.dispatchRockPaperScissorsWinner(playersGameRoom)
         }
     }
-    dispatchRockPaperScissorsWinner(players) {
+    dispatchRockPaperScissorsWinner(gameRoom) {
+        let players = gameRoom.rockPaperScissors
         let winner = determineWinner(players[0].choice, players[1].choice)
-        winner = (winner === "p1") ? players[0].socket : players[1].socket
-        players.forEach(player => this.socket.to(player.socket.id).emit("RPC results", winner))
+        winner = (winner === "p1") ? players[0].socket.id : players[1].socket.id
+
+        this.messageGameRoom(gameRoom.id, "RPC results", winner)
     }
     findPlayersGameRoom(player) {
         let gameRoom

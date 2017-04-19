@@ -13,7 +13,7 @@ describe("GameManager", () => {
     beforeEach((done) => {
         server = require("../server/server.js").server
         serverSocket = require("../server/server.js").socket
-        gameManager = new (require("../server/GameManager"))(serverSocket)
+        gameManager = require("../server/server.js").gameManager
         client = io("http://localhost:8000")
         done()
     })
@@ -25,12 +25,12 @@ describe("GameManager", () => {
 
             client.on("player joined", (data) => {
                 playerWasAdded = true;
-
-                client.disconnect()
             })
 
             setTimeout(() => {
+                let gameRoom = gameManager.findPlayersGameRoom(client)
                 playerWasAdded.should.equal(true)
+                gameManager.endGame(gameRoom)
                 done()
             }, 1000)
         })
@@ -63,9 +63,11 @@ describe("GameManager", () => {
     it("should have 1 game room setup after adding 2 players", (done) => {
         let client2 = io("http://localhost:8000")
         gameManager.addPlayer(client)
+        gameManager.addPlayer(client2)
         gameManager.gameRooms.length.should.equal(1)
 
         client.disconnect()
+        client2.disconnect()
         done()
     })
     it("should have 2 game rooms setup after adding 3 players", (done) => {
@@ -197,6 +199,7 @@ describe("GameManager", () => {
         setTimeout(() => {
             let gameRoom = gameManager.findPlayersGameRoom(client)
             expect(gameRoom.rockPaperScissors[0].socket).to.equal(client)
+            client.disconnect()
             done()
         }, 3000)
     })
