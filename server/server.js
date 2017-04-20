@@ -3,7 +3,6 @@ const socket = require("socket.io");
 const path = require("path");
 const GameManager = require("./GameManager");
 const determineWinner = require("./rockPaperScissors");
-console.log("THIS SERVER IS BEING INITIATED!!!!")
 const app = express();
 
 app.use(express.static("app"));;
