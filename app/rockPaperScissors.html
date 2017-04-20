@@ -16,6 +16,7 @@
 </div>
 
 <script>
+    myVar = "Hello World :D"
     $(".rpc").click((e) => socket.emit("RPC move", getMove(e.target)))
 
     function getMove(target) {
@@ -39,5 +40,7 @@
         } else {
             $("body").html("You lost rock paper scissors D:")
         }
+        setTimeout(() => window.location.replace("/ticTacToe"), 2000)
+        
     })
 </script>

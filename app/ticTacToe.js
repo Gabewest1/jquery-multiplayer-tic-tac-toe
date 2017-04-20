@@ -3,8 +3,10 @@ const socket = io()
 $(document).ready(() => {
     socket.on("move", handleMove)
     socket.on("reset", resetBoard)
-    socket.on("choose team", chooseTeam)
+    socket.on("set team", setTeam)
 
+    console.log(window.myVar)
+    
     let isPlayer1Turn = true
     let isPlayer1
 
@@ -12,9 +14,9 @@ $(document).ready(() => {
     $(".tile").click(handleTileClick)
 
     let resetGameButton = $("#reset").click(handleReset)
-
+ 
     /*Functions to handle game rules below */
-    function chooseTeam(teams, cb) {
+    function setTeam(teams, cb) {
         let answer = ""
         while(answer.length !== 1) {
             answer = prompt(`Choose a team: ${teams.join(" ")}`)

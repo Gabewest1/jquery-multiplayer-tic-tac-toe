@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha ./tests --timeout 15000",
-    "start": "nodemon server/server.js"
+    "start": "nodemon server/server.js",
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
     "colors": "^1.1.2",
     "express": "^4.15.2",
     "mocha": "^3.2.0",
-    "socket.io": "^1.7.3"
+    "socket.io": "^1.7.3",
+    "webpack": "^2.4.1"
   }
 }
